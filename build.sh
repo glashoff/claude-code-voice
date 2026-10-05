@@ -1,5 +1,6 @@
 #!/bin/bash
-# Build the APK inside the pinned Android build container (see build-env/Containerfile).
+# Build the APK, in the project's dev container (.devcontainer/) or, on a plain host, inside the pinned Android
+# build container (see build-env/Containerfile).
 # The debug signing key lives in the voice-android-keys volume so app updates keep the same signature.
 # Usage: ./build.sh            -> app/build/outputs/apk/release/app-release.apk
 #        ./build.sh <gradle args>
@@ -14,6 +15,11 @@ if [ ! -f "$AAR" ]; then
     curl -fL -o "$AAR.part" https://github.com/k2-fsa/sherpa-onnx/releases/download/v1.13.8/sherpa-onnx-1.13.8.aar
     echo "$AAR_SHA256  $AAR.part" | sha256sum -c - >/dev/null
     mv "$AAR.part" "$AAR"
+fi
+
+# Inside the project's dev container (.devcontainer/) the toolchain is already here.
+if [ -n "$ANDROID_HOME" ] && [ -x "$ANDROID_HOME/platform-tools/adb" ]; then
+    exec ./gradlew "${@:-assembleRelease}"
 fi
 
 IMAGE=voice-android-build

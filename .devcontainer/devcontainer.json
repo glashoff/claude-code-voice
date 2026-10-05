@@ -1,0 +1,47 @@
+{
+  "name": "claude-code-voice",
+
+  // Shared sandbox (devcontainer-build-image) plus a JDK, see Dockerfile.
+  // devcontainer-start recreates the container when a new build is available.
+  "build": { "dockerfile": "Dockerfile" },
+
+  // Public DNS instead of the LAN router, which is blocked.
+  // sshd is published on a random port on the host's loopback interface only.
+  "runArgs": [
+    "--dns=1.1.1.1", "--dns=9.9.9.9", "--dns-search=.",
+    "--publish=127.0.0.1::2222"
+  ],
+
+  // Creates missing bind-mount sources on the host (CLAUDE.md, SSH key).
+  "initializeCommand": "python3 ${localEnv:HOME}/.local/share/devcontainer-sandbox/initialize.py",
+
+  // Pinned Android SDK into its volume; a no-op once installed.
+  "postCreateCommand": "bash .devcontainer/setup-android-sdk.sh",
+
+  "containerEnv": {
+    "ANDROID_HOME": "/opt/android-sdk",
+    "JAVA_HOME": "/usr/lib/jvm/java-21-openjdk-amd64"
+  },
+
+  "mounts": [
+    // Global Claude instructions from the host, read-only.
+    "source=${localEnv:HOME}/.claude/CLAUDE.md,target=/home/vscode/.claude/CLAUDE.md,type=bind,readonly",
+    // Git identity from the host (created by initialize.py), read-only;
+    // no credential helpers, fetching from GitHub only (README).
+    "source=${localEnv:HOME}/.config/devcontainer-sandbox/gitconfig-${localWorkspaceFolderBasename},target=/home/vscode/.gitconfig,type=bind,readonly",
+    // The container config itself is read-only from inside the container.
+    // The container proposes changes to it in protected_draft/.devcontainer/,
+    // and devcontainer-approve applies them (README "Protected files").
+    "source=${localWorkspaceFolder}/.devcontainer,target=${containerWorkspaceFolder}/.devcontainer,type=bind,readonly",
+    // Runs on the host (adb to the phone), so it is protected the same way.
+    "source=${localWorkspaceFolder}/install.sh,target=${containerWorkspaceFolder}/install.sh,type=bind,readonly",
+    // Public key for SSH login (created by initialize.py), read-only.
+    "source=${localEnv:HOME}/.ssh/devcontainer_ed25519.pub,target=/etc/ssh/devcontainer/authorized_keys,type=bind,readonly",
+    // Android SDK (several GB), Gradle cache and the signing key survive
+    // container rebuilds. Keep voice-android-keys, or updates cannot be
+    // installed over the existing app.
+    "source=voice-android-sdk,target=/opt/android-sdk,type=volume",
+    "source=voice-android-gradle,target=/home/vscode/.gradle,type=volume",
+    "source=voice-android-keys,target=/home/vscode/.android,type=volume"
+  ]
+}

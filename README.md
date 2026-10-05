@@ -53,14 +53,15 @@ phone ──SSH──> server ──(optional) docker exec──> project contai
 - Android 10 or newer (continuous recognition: Android 13+); built for arm64.
 - On the server: `sshd` with public key login, Claude Code (`claude` on the `PATH`, `~/.local/bin` is added),
   GNU coreutils (`tail --pid`), `setsid`, `mkfifo`. For container projects: Docker and the dev container setup.
-- For building: Podman.
+- For building: the project's dev container ([base-devcontainer](https://github.com/glashoff/devcontainer-sandbox)),
+  or Podman.
 
 ## Building
 
 ```sh
 cp voice.properties.example voice.properties   # your server address and user, not in the repository
 ./build.sh                                      # -> app/build/outputs/apk/release/app-release.apk
-adb install -r app/build/outputs/apk/release/app-release.apk
+./install.sh                                    # on the host: stop the app, install the APK, start it again
 ```
 
 ### Installing over Wi-Fi (wireless debugging)
@@ -77,9 +78,17 @@ adb install -r app/build/outputs/apk/release/app-release.apk
 The port changes whenever wireless debugging is switched off and on or the phone reconnects to the network, so run
 `adb connect` again with the port currently shown on the phone.
 
-`build.sh` builds in a pinned container image (`build-env/Containerfile`) and fetches the sherpa-onnx library
-once, checking its SHA-256. The signing key is kept in the Podman volume `voice-android-keys`; keep that volume, or
-updates cannot be installed over the existing app.
+`build.sh` fetches the sherpa-onnx library once, checking its SHA-256, and runs Gradle:
+
+- **In the dev container** (`.devcontainer/`, started with `devcontainer-start`): the shared sandbox image plus a
+  JDK. The pinned Android SDK is installed on the first start into the Docker volume `voice-android-sdk`; Gradle's
+  cache and the signing key are kept in `voice-android-gradle` and `voice-android-keys`. The container cannot reach
+  the local network, so run `adb` on the host.
+- **On a plain host**: in a pinned Podman image (`build-env/Containerfile`), with the Podman volumes of the same
+  names.
+
+Keep the volume `voice-android-keys`, or updates cannot be installed over the existing app. Both setups must hold
+the same `debug.keystore`.
 
 ## Setup
 
