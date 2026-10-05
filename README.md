@@ -63,6 +63,20 @@ cp voice.properties.example voice.properties   # your server address and user, n
 adb install -r app/build/outputs/apk/release/app-release.apk
 ```
 
+### Installing over Wi-Fi (wireless debugging)
+
+`adb install` needs a connection to the phone. Without a cable, use wireless debugging (Android 11+):
+
+1. On the phone: *Settings → Developer options → Wireless debugging* (enable developer options first by tapping
+   *Build number* seven times). Phone and computer must be in the same network.
+2. First time only, pair: tap *Pair device with pairing code* and run on the computer
+   `adb pair <IP>:<pairing port>` with the code shown on the phone.
+3. Connect: the *Wireless debugging* screen shows *IP address & port*; run
+   `adb connect <IP>:<port>`. Check with `adb devices`.
+
+The port changes whenever wireless debugging is switched off and on or the phone reconnects to the network, so run
+`adb connect` again with the port currently shown on the phone.
+
 `build.sh` builds in a pinned container image (`build-env/Containerfile`) and fetches the sherpa-onnx library
 once, checking its SHA-256. The signing key is kept in the Podman volume `voice-android-keys`; keep that volume, or
 updates cannot be installed over the existing app.
