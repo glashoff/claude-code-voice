@@ -1,4 +1,4 @@
-package dev.voiceproto
+package dev.claudecodevoice
 
 import android.media.AudioAttributes
 import android.media.AudioFormat

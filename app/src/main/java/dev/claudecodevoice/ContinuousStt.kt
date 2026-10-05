@@ -1,4 +1,4 @@
-package dev.voiceproto
+package dev.claudecodevoice
 
 import android.annotation.SuppressLint
 import android.content.Context

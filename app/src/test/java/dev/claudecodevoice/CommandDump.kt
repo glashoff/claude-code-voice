@@ -1,4 +1,4 @@
-package dev.voiceproto
+package dev.claudecodevoice
 
 import java.io.File
 import org.junit.Test

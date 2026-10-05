@@ -1,4 +1,4 @@
-package dev.voiceproto
+package dev.claudecodevoice
 
 import android.util.Log
 import com.jcraft.jsch.ChannelExec
@@ -124,7 +124,7 @@ class ClaudeRemote(private val keyDir: File, private val pinnedHostKey: () -> St
             pair.writePublicKey(publicKey.absolutePath, "voice-app")
             pair.dispose()
         }
-        return publicKey.readText().trim().also { Log.i("VoiceProto", "SSH public key: $it") }
+        return publicKey.readText().trim().also { Log.i("ClaudeCodeVoice", "SSH public key: $it") }
     }
 
     @Synchronized
@@ -392,7 +392,7 @@ class ClaudeRemote(private val keyDir: File, private val pinnedHostKey: () -> St
         channel.disconnect()
         ok
     } catch (e: Exception) {
-        Log.w("VoiceProto", "write to Claude failed", e)
+        Log.w("ClaudeCodeVoice", "write to Claude failed", e)
         false
     }
 

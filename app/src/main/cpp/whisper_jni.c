@@ -10,7 +10,7 @@
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, TAG, __VA_ARGS__)
 
 JNIEXPORT jlong JNICALL
-Java_dev_voiceproto_WhisperNative_init(JNIEnv *env, jclass clazz, jstring model_path) {
+Java_dev_claudecodevoice_WhisperNative_init(JNIEnv *env, jclass clazz, jstring model_path) {
     (void) clazz;
     const char *path = (*env)->GetStringUTFChars(env, model_path, NULL);
     struct whisper_context_params params = whisper_context_default_params();
@@ -22,7 +22,7 @@ Java_dev_voiceproto_WhisperNative_init(JNIEnv *env, jclass clazz, jstring model_
 }
 
 JNIEXPORT void JNICALL
-Java_dev_voiceproto_WhisperNative_free(JNIEnv *env, jclass clazz, jlong ctx) {
+Java_dev_claudecodevoice_WhisperNative_free(JNIEnv *env, jclass clazz, jlong ctx) {
     (void) env;
     (void) clazz;
     if (ctx != 0) whisper_free((struct whisper_context *) ctx);
@@ -30,7 +30,7 @@ Java_dev_voiceproto_WhisperNative_free(JNIEnv *env, jclass clazz, jlong ctx) {
 
 // Returns the transcript as UTF-8 bytes (NewStringUTF expects modified UTF-8, which breaks on emoji).
 JNIEXPORT jbyteArray JNICALL
-Java_dev_voiceproto_WhisperNative_transcribe(JNIEnv *env, jclass clazz, jlong ctx_ptr, jfloatArray audio,
+Java_dev_claudecodevoice_WhisperNative_transcribe(JNIEnv *env, jclass clazz, jlong ctx_ptr, jfloatArray audio,
                                              jstring language, jstring prompt, jint threads) {
     (void) clazz;
     struct whisper_context *ctx = (struct whisper_context *) ctx_ptr;
@@ -85,7 +85,7 @@ Java_dev_voiceproto_WhisperNative_transcribe(JNIEnv *env, jclass clazz, jlong ct
 }
 
 JNIEXPORT jstring JNICALL
-Java_dev_voiceproto_WhisperNative_systemInfo(JNIEnv *env, jclass clazz) {
+Java_dev_claudecodevoice_WhisperNative_systemInfo(JNIEnv *env, jclass clazz) {
     (void) clazz;
     return (*env)->NewStringUTF(env, whisper_print_system_info());
 }

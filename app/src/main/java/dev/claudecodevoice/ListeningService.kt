@@ -1,4 +1,4 @@
-package dev.voiceproto
+package dev.claudecodevoice
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -23,7 +23,7 @@ class ListeningService : Service() {
     companion object {
         private const val CHANNEL_ID = "listening"
         private const val NOTIFICATION_ID = 1
-        private const val ACTION_STOP = "dev.voiceproto.STOP_LISTENING"
+        private const val ACTION_STOP = "dev.claudecodevoice.STOP_LISTENING"
 
         /** Set by the ViewModel; invoked when the user taps "Stopp" in the notification. */
         @Volatile var onStopRequested: (() -> Unit)? = null
@@ -50,13 +50,13 @@ class ListeningService : Service() {
         startForeground(NOTIFICATION_ID, buildNotification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE)
         if (wakeLock == null) {
             wakeLock = getSystemService(PowerManager::class.java)
-                .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "voiceproto:listening")
+                .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "claudecodevoice:listening")
                 .apply { acquire() }
         }
         if (wifiLock == null) {
             @Suppress("DEPRECATION")
             wifiLock = getSystemService(WifiManager::class.java)
-                .createWifiLock(WifiManager.WIFI_MODE_FULL_LOW_LATENCY, "voiceproto:listening")
+                .createWifiLock(WifiManager.WIFI_MODE_FULL_LOW_LATENCY, "claudecodevoice:listening")
                 .apply { acquire() }
         }
         return START_NOT_STICKY
@@ -85,7 +85,7 @@ class ListeningService : Service() {
         )
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("Voice Prototype hört zu")
+            .setContentTitle("Claude Code Voice hört zu")
             .setContentText("Spracherkennung läuft – auch bei gesperrtem Bildschirm.")
             .setOngoing(true)
             .setContentIntent(openApp)

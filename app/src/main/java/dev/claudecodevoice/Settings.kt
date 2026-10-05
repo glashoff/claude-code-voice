@@ -1,4 +1,4 @@
-package dev.voiceproto
+package dev.claudecodevoice
 
 import android.content.Context
 import androidx.compose.runtime.mutableStateOf

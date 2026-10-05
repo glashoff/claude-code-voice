@@ -1,4 +1,4 @@
-package dev.voiceproto.ui
+package dev.claudecodevoice.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -77,13 +77,13 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import dev.voiceproto.MainViewModel
-import dev.voiceproto.claudeModels
-import dev.voiceproto.Role
-import dev.voiceproto.SessionInfo
-import dev.voiceproto.SttEngine
-import dev.voiceproto.SttLanguage
-import dev.voiceproto.WhisperModel
+import dev.claudecodevoice.MainViewModel
+import dev.claudecodevoice.claudeModels
+import dev.claudecodevoice.Role
+import dev.claudecodevoice.SessionInfo
+import dev.claudecodevoice.SttEngine
+import dev.claudecodevoice.SttLanguage
+import dev.claudecodevoice.WhisperModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -138,7 +138,7 @@ fun MainScreen(vm: MainViewModel) {
         topBar = {
             Column {
                 TopAppBar(
-                    title = { Text("Voice Prototype") },
+                    title = { Text("Claude Code Voice") },
                     actions = {
                         IconButton(onClick = { showSettings = true }) {
                             Icon(Icons.Filled.Settings, contentDescription = "Einstellungen")

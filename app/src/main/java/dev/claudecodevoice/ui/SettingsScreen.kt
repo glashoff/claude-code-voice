@@ -1,4 +1,4 @@
-package dev.voiceproto.ui
+package dev.claudecodevoice.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
@@ -35,10 +35,10 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import dev.voiceproto.MainViewModel
-import dev.voiceproto.SttEngine
-import dev.voiceproto.SttLanguage
-import dev.voiceproto.WhisperModel
+import dev.claudecodevoice.MainViewModel
+import dev.claudecodevoice.SttEngine
+import dev.claudecodevoice.SttLanguage
+import dev.claudecodevoice.WhisperModel
 
 /** Everything that is set up once and rarely changed; the main screen keeps only what is used while talking. */
 @OptIn(ExperimentalMaterial3Api::class)

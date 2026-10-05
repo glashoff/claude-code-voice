@@ -1,4 +1,4 @@
-package dev.voiceproto
+package dev.claudecodevoice
 
 import java.text.SimpleDateFormat
 import java.util.Date
