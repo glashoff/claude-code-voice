@@ -578,7 +578,20 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         continuousSupport = "Download angestoßen – Android zeigt ggf. einen Dialog. Danach erneut prüfen."
     }
 
+    /** A call rings or is active: go silent, release the microphone and detach; Claude keeps running on the server. */
+    private val callMonitor = CallMonitor(app) {
+        viewModelScope.launch {
+            if (!listening) return@launch
+            speaker.stop()
+            stopListening()
+            closeConversation()
+            claudeStatus = "Getrennt wegen Anruf. Zum Fortsetzen wieder zuhören starten."
+            addEntry("Getrennt wegen Anruf.", "App")
+        }
+    }
+
     fun startListening() {
+        callMonitor.start()
         // Foreground service keeps mic, CPU and Wi-Fi available while the screen is locked.
         ListeningService.onStopRequested = { viewModelScope.launch { stopListening() } }
         ListeningService.start(getApplication())
@@ -610,6 +623,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun stopListening() {
+        callMonitor.stop()
         ListeningService.stop(getApplication())
         HeadsetRoute.disable(getApplication())
         micSilent = false

@@ -95,7 +95,7 @@ fun MainScreen(vm: MainViewModel) {
     }
     fun toggleListening() {
         if (vm.listening) return vm.stopListening()
-        val needed = listOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.POST_NOTIFICATIONS).filter {
+        val needed = listOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.READ_PHONE_STATE).filter {
             ContextCompat.checkSelfPermission(context, it) != PackageManager.PERMISSION_GRANTED
         }
         if (needed.isEmpty()) vm.startListening() else permissionLauncher.launch(needed.toTypedArray())
