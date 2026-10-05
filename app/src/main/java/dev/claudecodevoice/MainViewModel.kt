@@ -1014,6 +1014,18 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 conversationKey = ""
                 permissionRequests.clear()
                 if (claudeBusy) endTurn()
+                // The saved conversation does not exist where Claude now runs, e.g. after the project got a dev
+                // container: its history stayed on the server. Forget it, so the next message starts a new one.
+                if (event.error?.contains("No conversation found with session ID") == true) {
+                    settings.putRaw(sessionKey(), "")
+                    settings.putRaw(sessionTitleKey(), "")
+                    currentSessionTitle = ""
+                    claudeStatus = "Neues Gespräch in $project."
+                    notify(if (replyLanguage == "German")
+                        "Das letzte Gespräch gibt es hier nicht mehr. Ich beginne ein neues, bitte sag es noch einmal."
+                        else "The last conversation is gone here. I am starting a new one, please say it again.")
+                    return
+                }
                 event.error?.let {
                     remote.disconnect()
                     addEntry(it, "Claude/SSH", isError = true)
