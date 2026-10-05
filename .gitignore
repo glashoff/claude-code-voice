@@ -1,0 +1,11 @@
+.gradle/
+build/
+app/build/
+app/.cxx/
+local.properties
+*.apk
+# Fetched by build.sh (checksum-verified), too large for the repository
+app/libs/*.aar
+app/libs/*.part
+# Personal defaults (see voice.properties.example)
+voice.properties

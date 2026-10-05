@@ -1,0 +1,4 @@
+# Personal defaults for the app, read at build time. Copy to voice.properties (not in the repository) and adjust.
+# Both can also be changed later in the app's settings.
+serverHost=192.168.1.10
+serverUser=yourname
